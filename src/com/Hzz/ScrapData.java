@@ -1,12 +1,17 @@
 package com.Hzz;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
 public class ScrapData extends GroupedData{
     public String msg = "";
     public String url = "";
     public String page_title = "";
     public String page_content_hash = "";
-
-
+    public Map<String, String> content_by_id = new HashMap<>();
+    
+    
 
     ScrapData() {}
     ScrapData(GroupedData data, String msg){
@@ -62,4 +67,7 @@ public class ScrapData extends GroupedData{
 
     public String getPageContentHash() { return page_content_hash; }
     public void setPageContentHash(String page_content_hash) { this.page_content_hash = page_content_hash; }
+    
+    public Map getContentMap(){ return content_by_id; }
+    public void setContetnMap(Map x){ this.content_by_id = x; }
 }
