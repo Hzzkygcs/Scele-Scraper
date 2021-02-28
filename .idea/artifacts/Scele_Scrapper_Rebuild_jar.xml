@@ -1,0 +1,38 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Scele Scrapper Rebuild:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Scele_Scrapper_Rebuild_jar</output-path>
+    <root id="archive" name="Scele Scrapper Rebuild.jar">
+      <element id="module-output" name="Scele Scrapper Rebuild" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/dec-0.1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/xalan-2.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/htmlunit-2.46.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/httpcore-4.4.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/httpmime-4.5.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/xml-apis-1.4.01.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/commons-io-2.8.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/commons-text-1.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/salvation2-3.0.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/serializer-2.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/commons-net-3.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/httpclient-4.5.13.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/xercesImpl-2.12.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/commons-codec-1.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/commons-lang3-3.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/neko-htmlunit-2.46.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/htmlunit-core-js-2.46.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/htmlunit-cssparser-1.7.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/jetty-io-9.4.35.v20201120.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/jetty-http-9.4.35.v20201120.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/jetty-util-9.4.35.v20201120.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/jetty-client-9.4.35.v20201120.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/websocket-api-9.4.35.v20201120.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/websocket-client-9.4.35.v20201120.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/htmlunit-2.46.0/lib/websocket-common-9.4.35.v20201120.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/python repr/repr-20130909.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/Guava/guava-23.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/Junit/junit-4.13.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../../06 Codes/02 Java/__library__/Junit/hamcrest-core-1.3.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
