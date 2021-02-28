@@ -31,8 +31,8 @@ public class Main {
 
     public static final String file_data_location = "scele data.pckl";
     public static final String difference_data_location = "scele data difference.pckl";
-    private static HashMap<String, GroupedData> previous_data;
-    private static HashMap<String, GroupedData> current_data;
+    private static HashMap<String, ScrapData> previous_data;
+    private static HashMap<String, ScrapData> current_data;
 
     //
     private static final String help_doc = """
@@ -79,7 +79,7 @@ public class Main {
             return;
         }
     
-        current_data = new HashMap<>(100);
+        current_data = new HashMap<String, ScrapData>(100);
     
         webClient = WebScraper.defaultScrapper(null);
         webClient.setUrlQueue(UrlEntryPoint.getList());  // set the queue with a pre-filled url list
@@ -155,7 +155,7 @@ public class Main {
         }
 
         try {
-            Main.previous_data = (HashMap<String, GroupedData>) Pickle.load(file_data_location);
+            Main.previous_data = (HashMap<String, ScrapData>) Pickle.load(file_data_location);
             return true;
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -329,15 +329,27 @@ public class Main {
             String page_title = result.getTitleText();
             String url = result.getUrl().toString();
 
-            DomNode main_content_element = result.querySelector("section#region-Main");
+            DomNode main_content_element = result.querySelector("section#region-main");
             String main_content = main_content_element.getTextContent();
             String hashed_content = Hash.sha512(main_content);
 
-            GroupedData new_data = new GroupedData();
+            ScrapData new_data = new ScrapData();
             new_data.page_title = page_title;
             new_data.url = url;
             new_data.page_content_hash = hashed_content;
-
+            Map<String, String> content_map = new_data.getContentMap();
+    
+            // store content by id
+            String selector = "li[id^='section']";
+            if (main_content_element.querySelector(selector) != null) {  // element exist/matched
+                DomNodeList node_list = main_content_element.querySelectorAll(selector);
+                for (Object obj_: node_list){
+                    assert obj_ instanceof HtmlElement;
+                    HtmlElement obj = (HtmlElement) obj_;
+                    content_map.put(obj.getAttribute("id"), obj.getTextContent());
+                }
+            }else out.println("Not found: li#selection");
+            
             current_data.put(url, new_data);
         }
 
@@ -354,31 +366,46 @@ public class Main {
         Set<String> still_exist_URLs = Sets.intersection(keys_previous_data, keys_current_data);
 
         for (String key: still_exist_URLs){
-            GroupedData prev = previous_data.get(key);
+            ScrapData prev = previous_data.get(key);
             String prev_hash = prev.page_content_hash;
-            GroupedData curr = current_data.get(key);
+            ScrapData curr = current_data.get(key);
             String curr_hash = curr.page_content_hash;
 
             if (! prev_hash.equals(curr_hash)){
-                differences.add(new ScrapData(prev, curr, "mod"));
+                ScrapData tmp = new ScrapData(prev, curr, "mod");
+                Map<String, String> tmp_map = tmp.getContentMap();
+                
+                // compare in-depth information: element-id level precision
+                Map<String, Integer> test = MapComparator.compareMap(prev.getContentMap(), curr.getContentMap());
+                for (var element_id: test.keySet()){
+                    if (test.get(element_id) == MapComparator.ONLY_LEFT_MAP){
+                        tmp_map.put(element_id, "new");
+                    }else if (test.get(element_id) == MapComparator.ONLY_RIGHT_MAP){
+                        tmp_map.put(element_id, "del");
+                    }else if (test.get(element_id) == MapComparator.DIFFERENT){
+                        tmp_map.put(element_id, "mod");
+                    }
+                }
+                differences.add(tmp);
             }
         }
 
         for (String key: new_URLs){
-            GroupedData prev = new GroupedData();
-            GroupedData curr = current_data.get(key);
+            ScrapData prev = new ScrapData();
+            ScrapData curr = current_data.get(key);
             ScrapData difference = new ScrapData(prev, curr, "new");
             differences.add(difference);
         }
 
         for (String key: deleted_URLs){
-            GroupedData prev = previous_data.get(key);
-            GroupedData curr = new GroupedData();
+            ScrapData prev = previous_data.get(key);
+            ScrapData curr = new ScrapData();
             ScrapData difference = new ScrapData(prev, curr, "del");
             differences.add(difference);
         }
 
         return differences;
     }
-
+    
+    
 }

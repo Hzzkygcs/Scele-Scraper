@@ -54,7 +54,6 @@ public class ScrapData extends GroupedData{
 
 
 
-
     /*   ---------------------  setters and getters  --------------------- */
     public String getMsg() { return msg; }
     public void setMsg(String msg) { this.msg = msg; }
