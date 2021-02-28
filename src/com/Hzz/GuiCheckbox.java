@@ -348,7 +348,7 @@ public class GuiCheckbox {
     public static void main(String[] args) {
         ArrayList<ScrapData> data;
         try {
-            data = (ArrayList<ScrapData>) Pickle.load(main.difference_data_location);
+            data = (ArrayList<ScrapData>) Pickle.load(Main.difference_data_location);
             GuiCheckbox test_app = new GuiCheckbox(data);
 
         } catch (ClassNotFoundException | IOException e) {

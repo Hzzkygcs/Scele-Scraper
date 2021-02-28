@@ -4,15 +4,11 @@ import static java.lang.System.out;
 
 
 import java.io.File;
-import java.net.URL;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import com.gargoylesoftware.htmlunit.HttpMethod;
 import com.gargoylesoftware.htmlunit.Page;
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebRequest;
 import com.gargoylesoftware.htmlunit.html.*;
 import com.google.common.annotations.Beta;
 import com.google.common.collect.Sets;
@@ -30,7 +26,7 @@ import java.nio.charset.StandardCharsets;
 import java.io.UnsupportedEncodingException;
 
 
-public class main {
+public class Main {
     private static WebScraper webClient;
 
     public static final String file_data_location = "scele data.pckl";
@@ -39,7 +35,7 @@ public class main {
     private static HashMap<String, GroupedData> current_data;
 
     //
-    private static String help_doc = """
+    private static final String help_doc = """
             --load-previous
                 to load previous session
             --update-scele
@@ -54,16 +50,10 @@ public class main {
         CustomPrintStream.setAsOutputStream(out_stream);
         
         if (args.length == 1){
-            switch (args[0].toLowerCase()){
-                case "--update-scele":
-                    updateScele();
-                    break;
-                case "--load-previous":
-                    loadPrevious();
-                    break;
-                default:
-                    out.println(help_doc);
-                    break;
+            switch (args[0].toLowerCase()) {
+                case "--update-scele" -> updateScele();
+                case "--load-previous" -> loadPrevious();
+                default -> out.println(help_doc);
             }
         }else if (args.length > 1){
             out.println(help_doc);
@@ -107,8 +97,8 @@ public class main {
         // get difference data between old link and new link
         ArrayList<ScrapData> differences =  getDifference();
         try {
-            Pickle.dump(main.difference_data_location, differences);
-            Pickle.dump(main.file_data_location, current_data);  // update the data
+            Pickle.dump(Main.difference_data_location, differences);
+            Pickle.dump(Main.file_data_location, current_data);  // update the data
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -135,7 +125,7 @@ public class main {
         console.getMainFrame().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
         // load previous difference data between old link and new link
-        ArrayList<ScrapData> differences =  null;
+        ArrayList<ScrapData> differences;
         try {
             differences = (ArrayList<ScrapData>) Pickle.load(difference_data_location);
     
@@ -154,18 +144,18 @@ public class main {
 
     // returns true on successful operation, and false on error
     private static boolean load_previous_data(){
-        File f = new File(main.file_data_location);
+        File f = new File(Main.file_data_location);
         if (! f.isFile()){  // file is either not exists or a directory
             HashMap<String, GroupedData> new_instance = new HashMap<>(100);
             try {
-                Pickle.dump(main.file_data_location, new_instance);
+                Pickle.dump(Main.file_data_location, new_instance);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         try {
-            main.previous_data = (HashMap<String, GroupedData>) Pickle.load(file_data_location);
+            Main.previous_data = (HashMap<String, GroupedData>) Pickle.load(file_data_location);
             return true;
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
@@ -188,7 +178,7 @@ public class main {
         try {
             out.println("Logging in...");
 
-            Page redirect_page = main.post(webClient, login_form_url, request_query);
+            Page redirect_page = Requests.post(webClient, login_form_url, request_query);
             if (redirect_page.getWebResponse().getStatusCode() != 200)
                 throw new RuntimeException("error status code when logging in");
             HtmlPage htmlPage = (HtmlPage) redirect_page;
@@ -246,36 +236,8 @@ public class main {
             throw new RuntimeException(ex.getCause());
         }
     }
-
-
-    // Method to send a post request
-    public static Page post(WebClient webClient, String url_string, String requestBody) throws Exception {
-        // credits: https://stackoverflow.com/a/30741599/7069108
-        URL url = new URL(url_string);
-        WebRequest requestSettings = new WebRequest(url, HttpMethod.POST);
-
-        requestSettings.setAdditionalHeader("Accept", "*/*");
-        requestSettings.setAdditionalHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
-        requestSettings.setAdditionalHeader("Referer", "REFURLHERE");
-        requestSettings.setAdditionalHeader("Accept-Language", "en-US,en;q=0.8");
-        requestSettings.setAdditionalHeader("Accept-Encoding", "gzip,deflate,sdch");
-        requestSettings.setAdditionalHeader("Accept-Charset", "ISO-8859-1,utf-8;q=0.7,*;q=0.3");
-        requestSettings.setAdditionalHeader("X-Requested-With", "XMLHttpRequest");
-        requestSettings.setAdditionalHeader("Cache-Control", "no-cache");
-        requestSettings.setAdditionalHeader("Pragma", "no-cache");
-        requestSettings.setAdditionalHeader("Origin", "https://YOURHOST");
-
-        requestSettings.setRequestBody(requestBody);
-
-
-        Page redirectPage = webClient.getPage(requestSettings);
-
-        return redirectPage;
-    }
-
-
-
-
+    
+    
     private static boolean logout(){
         HtmlPage home_page = null;
         try {
@@ -284,7 +246,7 @@ public class main {
             String url = temp.getAttribute("href");
 
             //HtmlPage logout = webClient.getPage(url);
-            post(webClient, url, "");
+            Requests.post(webClient, url, "");
             // assert logout.getWebResponse().getStatusCode() == 200;
 
             return true;
@@ -345,7 +307,7 @@ public class main {
             ArrayList<String> urls = new ArrayList<>(250); // name meaning: multiple URL
 
             DomNodeList<DomNode> elements_with_href =
-                    result.querySelectorAll("section#region-main *[href], div[role=main] *[href]"
+                    result.querySelectorAll("section#region-Main *[href], div[role=Main] *[href]"
                                                     + ", ul.dropdown-menu *[href]");
 
             for (DomNode obj: elements_with_href){
@@ -367,7 +329,7 @@ public class main {
             String page_title = result.getTitleText();
             String url = result.getUrl().toString();
 
-            DomNode main_content_element = result.querySelector("section#region-main");
+            DomNode main_content_element = result.querySelector("section#region-Main");
             String main_content = main_content_element.getTextContent();
             String hashed_content = Hash.sha512(main_content);
 
