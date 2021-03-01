@@ -50,13 +50,7 @@ class CheckboxAndData{
         this.page_title = data.getPageTitle();
         this.msg = data.getMsg();
     }
-
-    CheckboxAndData (JCheckBox checkbox, DataDifference data){
-        this.checkbox = checkbox;
-        this.url = data.getUrl();
-        this.page_title = data.getPageTitle();
-        this.msg = data.difference_note;
-    }
+    
 }
 
 
@@ -74,7 +68,7 @@ public class GuiCheckbox {
 
     // I declare this so that I can flexibly change the List type without have to do much work, and so that
     // I can use BOTH Cloneable and List interface in the same variable by using ICloneableList
-    class MyList<T>  extends ArrayList<T> implements ICloneableList<T>{
+    static class MyList<T>  extends ArrayList<T> implements ICloneableList<T>{
     }
     private MyList<CheckboxAndData> checkbox_and_data = new MyList<>();
     private static GridBagConstraints default_checkbox_gridbagconst;
@@ -93,6 +87,7 @@ public class GuiCheckbox {
     /*  ------------------------- Setters and getters -------------------------  */
 
     public JFrame getMainFrame(){ return this.main_frame;}
+    public JFrame setMainFrame(JFrame x){ return this.main_frame = x;}
 
 
     /*  -------------------------     Constructor     -------------------------  */
@@ -348,6 +343,7 @@ public class GuiCheckbox {
     public static void main(String[] args) {
         ArrayList<ScrapData> data;
         try {
+            //noinspection unchecked
             data = (ArrayList<ScrapData>) Pickle.load(Main.difference_data_location);
             GuiCheckbox test_app = new GuiCheckbox(data);
 

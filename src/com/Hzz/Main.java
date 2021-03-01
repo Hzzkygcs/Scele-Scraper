@@ -16,6 +16,7 @@ import org.w3c.dom.NamedNodeMap;
 
 
 import net.sf.repr.Repr;
+import org.w3c.dom.NodeList;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -61,6 +62,7 @@ public class Main {
             out.println(help_doc);
             updateScele();
         }
+        
     }
     
     
@@ -79,7 +81,7 @@ public class Main {
             return;
         }
     
-        current_data = new HashMap<String, ScrapData>(100);
+        current_data = new HashMap<>(100);
     
         webClient = WebScraper.defaultScrapper(null);
         webClient.setUrlQueue(UrlEntryPoint.getList());  // set the queue with a pre-filled url list
@@ -118,6 +120,7 @@ public class Main {
     }
     
     
+    @SuppressWarnings("unchecked")
     private static void loadPrevious(){
         GuiConsole console = new GuiConsole();
         console.activate();
@@ -143,6 +146,7 @@ public class Main {
     
 
     // returns true on successful operation, and false on error
+    @SuppressWarnings("unchecked")
     private static boolean load_previous_data(){
         File f = new File(Main.file_data_location);
         if (! f.isFile()){  // file is either not exists or a directory
@@ -166,8 +170,9 @@ public class Main {
 
     private static void login_scele(){
         String login_form_url = "https://scele.cs.ui.ac.id/login/index.php?authldap_skipntlmsso=1";
-        String username = "<username>";  // needed to get access to scele and emas2
-        String pss = "<pasword>";
+        String username, pss;  // needed to get access to scele and emas2
+        username = "<username>"; pss = "<password>";
+        
 
         String tmp1, tmp2;
         tmp1 = encodeValue(username);
@@ -192,7 +197,7 @@ public class Main {
             JOptionPane.showMessageDialog(null, "Couldn't login to scele.cs.ui.ac.id",
                                           "Login Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
-            System.exit(130); // random value, idk what errcode to assign
+            System.exit(130); // random value, idk what error code to assign
         }
 
 
@@ -201,18 +206,21 @@ public class Main {
     }
 
 
+    // returns true on success, false otherwise
     @Beta
-    private static void login_emas2(String username, String pss){
+    private static boolean login_emas2(String username, String pss){
         String login_form_url = "https://emas2.ui.ac.id/login/index.php";
 
-        HtmlPage login_page = null;
+        HtmlPage login_page;
         try {
             login_page = webClient.getPage(login_form_url);
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         }
 
         HtmlForm form = login_page.getHtmlElementById("login");
+        if (form == null)  return false;
         HtmlTextInput username_field = form.getInputByName("username");
         HtmlTextInput pss_field = form.getInputByName("password");
         HtmlSubmitInput submit_btn = login_page.getHtmlElementById("loginbtn");
@@ -223,7 +231,10 @@ public class Main {
             submit_btn.click();
         }catch(IOException e){
             e.printStackTrace();
+            return false;
         }
+        
+        return true;
     }
 
 
@@ -239,7 +250,8 @@ public class Main {
     
     
     private static boolean logout(){
-        HtmlPage home_page = null;
+        HtmlPage home_page;
+        //noinspection TryWithIdenticalCatches
         try {
             home_page = webClient.getPage("https://scele.cs.ui.ac.id");
             HtmlElement temp = home_page.querySelector("a[data-title='logout,moodle']");
@@ -259,13 +271,12 @@ public class Main {
     }
 
     private static class ScrapProcedure implements BiFunction<WebScraper, Page, Collection<String>> {
-        private ScrapPattern regexp_url_list = new ScrapPattern();
+        private final ScrapPattern regexp_url_list = new ScrapPattern();
 
         public static String getAttribute(DomNode node, String attributeName){
             NamedNodeMap temp1 = node.getAttributes();
             DomAttr temp2 = (DomAttr) temp1.getNamedItem(attributeName);
-            String ret = temp2.getValue();
-            return ret;
+            return temp2.getValue();
         }
 
         public static boolean isStringMatches(String theInputString, Pattern theRegexPattern){
@@ -342,7 +353,7 @@ public class Main {
             // store content by id
             String selector = "li[id^='section']";
             if (main_content_element.querySelector(selector) != null) {  // element exist/matched
-                DomNodeList node_list = main_content_element.querySelectorAll(selector);
+                DomNodeList<DomNode> node_list = main_content_element.querySelectorAll(selector);
                 for (Object obj_: node_list){
                     assert obj_ instanceof HtmlElement;
                     HtmlElement obj = (HtmlElement) obj_;

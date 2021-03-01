@@ -36,8 +36,6 @@ public class WebScraper extends WebClient {
      * the information using .setTiedData(), and inside the function, retrieve it by using self.getTiedData()
      * where the self is the first parameter of the function. Multiple data? send linkedList or the like.
      * User should implements this method.
-     * @param html_page
-     * @return
      */
     private BiFunction<WebScraper, Page, Collection<String>> handler = null;  // implement this
 
@@ -81,8 +79,6 @@ public class WebScraper extends WebClient {
      * Define a new object of WebScraper without having to implements all the required structure. Instantiating
      * a new object from this static method will make you sure you won't get any error from .check() method and
      * also help you reduce your code length.
-     * @param URL_entry_point
-     * @return
      */
     public static WebScraper defaultScrapper(String URL_entry_point){
         WebScraper ret = new WebScraper(URL_entry_point);
@@ -90,7 +86,7 @@ public class WebScraper extends WebClient {
         ret.setUrlSet(new HashSet<>());
         ret.setScrapType(WebScraper.DFS);
         ret.setHandlerFunc(
-                (WebScraper self, Page ReceivedPage) -> {return new LinkedList<>(); }
+                (WebScraper self, Page ReceivedPage) -> new LinkedList<>()
                 );
 
         // these are my default settings for HtmlUnit
@@ -106,7 +102,6 @@ public class WebScraper extends WebClient {
     /**
      * Same as check(), but it will return a boolean instead of throwing errors.
      * It will also call check() in order to update the state (ready/not-ready state).
-     * @return
      */
     public boolean isReady(){
         if (this.ready) return true;
@@ -122,7 +117,6 @@ public class WebScraper extends WebClient {
      * check if this class is ready to be run (ready to be used). If not yet ready, it will throws exception.
      * if ready, it will be fine (nothing happens). This method will also update the not-ready state into
      * ready state if eligible.
-     * @throws IllegalStateException
      */
     public void check() throws IllegalStateException{
         if (this.ready) return;
@@ -145,7 +139,6 @@ public class WebScraper extends WebClient {
 
     /**
      * An outside command to start the scrapping process. The `.isReady()` method should yields true to run this process
-     * @return
      */
     public void startScrap() throws IOException {
         if (!this.isReady()) throw new IllegalStateException("The object is not ready yet. Please check the problem "

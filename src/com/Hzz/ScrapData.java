@@ -28,21 +28,21 @@ public class ScrapData extends GroupedData{
             this.url = prev.getUrl();
         else if (! "".equals(curr.getUrl()))
             this.url = curr.getUrl();
-        else throw new RuntimeException("Shouldn't be occured. There's a bug");
+        else throw new RuntimeException("Shouldn't be occurred. There's a bug");
 
 
         if (! "".equals(prev.getPageTitle()))
             this.page_title = prev.getPageTitle();
         else if (! "".equals(curr.getPageTitle()))
             this.page_title = curr.getPageTitle();
-        else throw new RuntimeException("Shouldn't be occured. There's a bug");
+        else throw new RuntimeException("Shouldn't be occurred. There's a bug");
 
 
         if (! "".equals(prev.getPageContentHash()))
             this.page_content_hash = prev.getPageContentHash();
         else if (! "".equals(curr.getPageContentHash()))
             this.page_content_hash = curr.getPageContentHash();
-        else throw new RuntimeException("Shouldn't be occured. There's a bug");
+        else throw new RuntimeException("Shouldn't be occurred. There's a bug");
     }
 
     ScrapData(String msg, String url, String page_title, String page_content_hash) {
@@ -67,6 +67,6 @@ public class ScrapData extends GroupedData{
     public String getPageContentHash() { return page_content_hash; }
     public void setPageContentHash(String page_content_hash) { this.page_content_hash = page_content_hash; }
     
-    public Map getContentMap(){ return content_by_id; }
-    public void setContetnMap(Map x){ this.content_by_id = x; }
+    public Map<String, String> getContentMap(){ return content_by_id; }
+    public void setContentMap(Map<String, String>  x){ this.content_by_id = x; }
 }
