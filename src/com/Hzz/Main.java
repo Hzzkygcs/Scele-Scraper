@@ -4,6 +4,7 @@ import static java.lang.System.out;
 
 
 import java.io.File;
+import java.io.PrintStream;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -34,6 +35,8 @@ public class Main {
     public static final String difference_data_location = "scele data difference.pckl";
     private static HashMap<String, ScrapData> previous_data;
     private static HashMap<String, ScrapData> current_data;
+    
+    public static PrintStream console_out;
 
     //
     private static final String help_doc = """
@@ -47,6 +50,7 @@ public class Main {
 
     
     public static void main(String[] args) {
+        console_out = System.out;
         CustomPrintStream out_stream = new CustomPrintStream(System.out);
         CustomPrintStream.setAsOutputStream(out_stream);
         
@@ -318,8 +322,9 @@ public class Main {
 
             ArrayList<String> urls = new ArrayList<>(250); // name meaning: multiple URL
 
+            // note that this querySelectorAll is case-sensitive
             DomNodeList<DomNode> elements_with_href =
-                    result.querySelectorAll("section#region-Main *[href], div[role=Main] *[href]"
+                    result.querySelectorAll("section#region-main *[href], div[role=main] *[href]"
                                                     + ", ul.dropdown-menu *[href]");
 
             for (DomNode obj: elements_with_href){
@@ -333,6 +338,7 @@ public class Main {
                     }
                 }
             }
+            
 
             return urls;
         }
