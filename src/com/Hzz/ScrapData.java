@@ -1,16 +1,40 @@
 package com.Hzz;
 
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
+import net.sf.repr.Repr;
+
+import java.io.Serializable;
+import java.util.*;
+
+
+
 
 public class ScrapData extends GroupedData{
     public String msg = "";
     public String url = "";
     public String page_title = "";
     public String page_content_hash = "";
-    public Map<String, String> content_by_id = new HashMap<>();
+    public SortedMap<String, String> content_by_id = new TreeMap<>(new TreeMapComparator());
     
+    
+    /*
+    content_by_id's key is usually "section-(digit number)" where we want it to be sorted by its digit, not
+    its string, so we do need a comparator
+     */
+    static class TreeMapComparator implements Comparator<String>, Serializable {
+        public int extractInt(String str_to_be_extracted){
+            String pattern = "section-";
+            int pattern_len = pattern.length();
+            String substring = str_to_be_extracted.substring(pattern_len);
+            return Integer.parseInt(substring);
+        }
+        
+        @Override
+        public int compare(String o1, String o2) {
+            Integer o1_extracted_key = extractInt(o1);
+            Integer o2_extracted_key = extractInt(o2);
+            return o1_extracted_key.compareTo(o2_extracted_key);
+        }
+    }
     
 
     ScrapData() {}
@@ -67,6 +91,8 @@ public class ScrapData extends GroupedData{
     public String getPageContentHash() { return page_content_hash; }
     public void setPageContentHash(String page_content_hash) { this.page_content_hash = page_content_hash; }
     
-    public Map<String, String> getContentMap(){ return content_by_id; }
-    public void setContentMap(Map<String, String>  x){ this.content_by_id = x; }
+    public SortedMap<String, String> getContentMap(){ return content_by_id; }
+    public void setContentMap(SortedMap<String, String> x){ this.content_by_id = x; }
+    
+    
 }

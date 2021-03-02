@@ -172,6 +172,7 @@ public class Main {
         String login_form_url = "https://scele.cs.ui.ac.id/login/index.php?authldap_skipntlmsso=1";
         String username, pss;  // needed to get access to scele and emas2
         username = "<username>"; pss = "<password>";
+        username = "immanuel01"; pss = "|23g%O=s";
         
 
         String tmp1, tmp2;
@@ -381,31 +382,33 @@ public class Main {
             String prev_hash = prev.page_content_hash;
             ScrapData curr = current_data.get(key);
             String curr_hash = curr.page_content_hash;
-
+    
+            // compare in-depth information: element-id level precision
+            Map<String, Integer> map_comparation = MapComparator.compareMap(prev.getContentMap(),
+                                                                            curr.getContentMap());
+            
             if (! prev_hash.equals(curr_hash)){
-                ScrapData tmp = new ScrapData(prev, curr, "mod");
+                ScrapData tmp = new ScrapData(prev, curr, "mod");  // mod = modified
                 Map<String, String> tmp_map = tmp.getContentMap();
                 
-                // compare in-depth information: element-id level precision
-                Map<String, Integer> test = MapComparator.compareMap(prev.getContentMap(), curr.getContentMap());
-                for (var element_id: test.keySet()){
-                    if (test.get(element_id) == MapComparator.ONLY_LEFT_MAP){
-                        tmp_map.put(element_id, "new");
-                    }else if (test.get(element_id) == MapComparator.ONLY_RIGHT_MAP){
-                        tmp_map.put(element_id, "del");
-                    }else if (test.get(element_id) == MapComparator.DIFFERENT){
-                        tmp_map.put(element_id, "mod");
-                    }
-                }
+                for (var element_id: map_comparation.keySet())
+                    if (map_comparation.get(element_id) != MapComparator.DIFFERENT)
+                        tmp_map.put(element_id, "new/modified");
+                    
                 differences.add(tmp);
             }
         }
 
+        
         for (String key: new_URLs){
             ScrapData prev = new ScrapData();
             ScrapData curr = current_data.get(key);
             ScrapData difference = new ScrapData(prev, curr, "new");
             differences.add(difference);
+    
+            Map<String, String> tmp_map = difference.getContentMap();
+            for (var element_id: curr.getContentMap().keySet())
+                tmp_map.put(element_id, "new/modified");
         }
 
         for (String key: deleted_URLs){

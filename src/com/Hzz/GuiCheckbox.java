@@ -4,21 +4,17 @@ package com.Hzz;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.awt.font.TextAttribute;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 import java.awt.Desktop;
 import java.util.List;
 
 
-
-class CheckboxAndData{
+class CheckboxAndData extends ScrapData{
     public JCheckBox checkbox;
     public String url;
     public String page_title;
@@ -49,6 +45,7 @@ class CheckboxAndData{
         this.url = data.getUrl();
         this.page_title = data.getPageTitle();
         this.msg = data.getMsg();
+        this.content_by_id = data.getContentMap();
     }
     
 }
@@ -163,30 +160,35 @@ public class GuiCheckbox {
             String msg = iter_item.getMsg();
             String url = iter_item.getUrl();
             String page_title = iter_item.getPageTitle();
+            Map<String, String> id_of_changed_elements = iter_item.getContentMap();
 
             String label = "%s (%s)".formatted(page_title, msg);
             JCheckBox checkbox = new JCheckBox(label);
-            checkbox_gridbagconst.gridx = x_pos;
+            checkbox_gridbagconst.gridx = 1;
             checkbox_gridbagconst.gridy = y_pos;
-
-            if (label.length() > default_checkbox_max_char   &&   x_pos+1 < default_checkbox_max_x){
-                checkbox_gridbagconst.gridwidth = 2;
-                x_pos += 1;
-            }else{
-                checkbox_gridbagconst.gridwidth = 1;
-            }
-
-            x_pos += 1;
-
-            if (x_pos >= default_checkbox_max_x){
-                x_pos = 0;
-                y_pos += 1;
-            }
-
+            
             iter_item.checkbox = checkbox;
             checkbox_panel.add(checkbox, checkbox_gridbagconst);
+            
+            JPanel element_id_label_container = new JPanel(new FlowLayout());
+            checkbox_gridbagconst.gridx = 2;
+            checkbox_gridbagconst.gridy = y_pos;
+            checkbox_panel.add(element_id_label_container, checkbox_gridbagconst);
+            
+            for (String element_id: id_of_changed_elements.keySet()){
+                String url_with_id = "%s#%s".formatted(url, element_id);
+                
+                JLabel element_id_label = new JLabel("#" + element_id + " ");
+                addUnderline(element_id_label);
+                element_id_label.setForeground(Color.blue);
+                element_id_label.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                element_id_label.addMouseListener(new HyperlinkLabelListener(url_with_id));
+                
+                element_id_label_container.add(element_id_label);
+            }
 
             counter += 1;
+            y_pos += 1;
         }
     }
 
@@ -204,6 +206,9 @@ public class GuiCheckbox {
     private void buildButtons(JPanel top_btn_panel, JPanel bottom_btn_panel){
         JButton open_btn = new JButton("Open");
         open_btn.addActionListener(new OpenBtnEventListener());
+    
+        JButton open_all_id_btn = new JButton("Open all id");
+        open_all_id_btn.addActionListener(new OpenAllIdBtnEventListener());
 
         JButton open_remove_btn = new JButton("Open & Remove");
         open_remove_btn.addActionListener(new OpenRemoveBtnEventListener());
@@ -225,6 +230,7 @@ public class GuiCheckbox {
 
 
         top_btn_panel.add(open_btn);
+        top_btn_panel.add(open_all_id_btn);
         top_btn_panel.add(open_remove_btn);
         top_btn_panel.add(open_exit_btn);
 
@@ -246,7 +252,14 @@ public class GuiCheckbox {
         }
     }
 
-
+    
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static void addUnderline(JComponent component){
+        Font component_font = component.getFont();
+        Map attributes = component_font.getAttributes();
+        attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        component.setFont(component_font.deriveFont(attributes));
+    }
 
     /*  ------------------------- Event Listener -------------------------  */
 
@@ -255,9 +268,26 @@ public class GuiCheckbox {
             for (CheckboxAndData obj: checkbox_and_data)
                 if (obj.checkbox.isSelected())
                     try {
-                        openUriInBrowser(obj.url);
+                        // get first id
+                        String id = obj.getContentMap().firstKey();
+                        openUriInBrowser("%s#%s".formatted(obj.url, id));
                     } catch (URISyntaxException | IOException uriSyntaxException) {
                         uriSyntaxException.printStackTrace();
+                    }
+        }
+    }
+    
+    class OpenAllIdBtnEventListener implements ActionListener {
+        public void actionPerformed(ActionEvent e){
+            for (CheckboxAndData obj: checkbox_and_data)
+                if (obj.checkbox.isSelected())
+                    for (String element_id: obj.content_by_id.keySet()){
+                        String url_with_id = "%s#%s".formatted(obj.url, element_id);
+                        try {
+                            openUriInBrowser(url_with_id);
+                        } catch (URISyntaxException | IOException uriSyntaxException) {
+                            uriSyntaxException.printStackTrace();
+                        }
                     }
         }
     }
@@ -275,7 +305,8 @@ public class GuiCheckbox {
                     filtered_checkbox.add(obj);
                 }else{
                     try {
-                        openUriInBrowser(obj.url);
+                        String id = obj.getContentMap().firstKey();
+                        openUriInBrowser("%s#%s".formatted(obj.url, id));
                     } catch (URISyntaxException | IOException uriSyntaxException) {
                         uriSyntaxException.printStackTrace();
                         break;
@@ -295,7 +326,8 @@ public class GuiCheckbox {
             for (CheckboxAndData obj: checkbox_and_data)
                 if (obj.checkbox.isSelected())
                     try {
-                        openUriInBrowser(obj.url);
+                        String id = obj.getContentMap().firstKey();
+                        openUriInBrowser("%s#%s".formatted(obj.url, id));
                     } catch (URISyntaxException | IOException uriSyntaxException) {
                         uriSyntaxException.printStackTrace();
                     }
@@ -337,7 +369,40 @@ public class GuiCheckbox {
             }
         }
     }
-
+    
+    static class HyperlinkLabelListener implements MouseListener {
+        String hyperlink_target_url;
+        
+        public HyperlinkLabelListener(String url){
+            super();
+            hyperlink_target_url = url;
+        }
+    
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            try {
+                openUriInBrowser(hyperlink_target_url);
+            } catch (URISyntaxException | IOException uriSyntaxException) {
+                uriSyntaxException.printStackTrace();
+            }
+        }
+    
+        @Override
+        public void mousePressed(MouseEvent e) {
+        }
+    
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+    
+        @Override
+        public void mouseEntered(MouseEvent e) {
+        }
+    
+        @Override
+        public void mouseExited(MouseEvent e) {
+        }
+    }
 
 
     public static void main(String[] args) {
