@@ -366,7 +366,7 @@ public class Main {
                     HtmlElement obj = (HtmlElement) obj_;
                     content_map.put(obj.getAttribute("id"), obj.getTextContent());
                 }
-            }else out.println("Not found: li#selection");
+            }
             
             current_data.put(url, new_data);
         }

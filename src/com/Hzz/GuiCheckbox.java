@@ -269,7 +269,7 @@ public class GuiCheckbox {
                 if (obj.checkbox.isSelected())
                     try {
                         // get first id
-                        String id = obj.getContentMap().firstKey();
+                        String id = obj.getContentMap().isEmpty()? "":obj.getContentMap().firstKey();
                         openUriInBrowser("%s#%s".formatted(obj.url, id));
                     } catch (URISyntaxException | IOException uriSyntaxException) {
                         uriSyntaxException.printStackTrace();
@@ -279,16 +279,19 @@ public class GuiCheckbox {
     
     class OpenAllIdBtnEventListener implements ActionListener {
         public void actionPerformed(ActionEvent e){
-            for (CheckboxAndData obj: checkbox_and_data)
-                if (obj.checkbox.isSelected())
-                    for (String element_id: obj.content_by_id.keySet()){
-                        String url_with_id = "%s#%s".formatted(obj.url, element_id);
-                        try {
+            try {
+                for (CheckboxAndData obj: checkbox_and_data)
+                    if (obj.checkbox.isSelected()) {
+                        for (String element_id : obj.content_by_id.keySet()) {
+                            String url_with_id = "%s#%s".formatted(obj.url, element_id);
                             openUriInBrowser(url_with_id);
-                        } catch (URISyntaxException | IOException uriSyntaxException) {
-                            uriSyntaxException.printStackTrace();
                         }
+                        
+                        if (obj.content_by_id.isEmpty()) openUriInBrowser(obj.url);
                     }
+            } catch (URISyntaxException | IOException uriSyntaxException) {
+                uriSyntaxException.printStackTrace();
+            }
         }
     }
 
@@ -305,7 +308,7 @@ public class GuiCheckbox {
                     filtered_checkbox.add(obj);
                 }else{
                     try {
-                        String id = obj.getContentMap().firstKey();
+                        String id = obj.getContentMap().isEmpty()? "":obj.getContentMap().firstKey();
                         openUriInBrowser("%s#%s".formatted(obj.url, id));
                     } catch (URISyntaxException | IOException uriSyntaxException) {
                         uriSyntaxException.printStackTrace();
@@ -313,7 +316,6 @@ public class GuiCheckbox {
                     }
                 }
             }
-
 
             checkbox_and_data = filtered_checkbox;  // update the list with the new one
             main_frame.getContentPane().removeAll();
@@ -326,7 +328,7 @@ public class GuiCheckbox {
             for (CheckboxAndData obj: checkbox_and_data)
                 if (obj.checkbox.isSelected())
                     try {
-                        String id = obj.getContentMap().firstKey();
+                        String id = obj.getContentMap().isEmpty()? "":obj.getContentMap().firstKey();
                         openUriInBrowser("%s#%s".formatted(obj.url, id));
                     } catch (URISyntaxException | IOException uriSyntaxException) {
                         uriSyntaxException.printStackTrace();
