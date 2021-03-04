@@ -70,6 +70,7 @@ public class GuiConsole {
         old_print_stream = this_print_stream;
 
         main_frame = new JFrame();
+        main_frame.setTitle("Scele-scrapper");
         main_frame.setLayout(new BorderLayout());
         main_frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         main_frame.setSize(500, 500);

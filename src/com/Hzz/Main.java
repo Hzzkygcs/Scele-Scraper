@@ -176,7 +176,7 @@ public class Main {
         String login_form_url = "https://scele.cs.ui.ac.id/login/index.php?authldap_skipntlmsso=1";
         String username, pss;  // needed to get access to scele and emas2
         username = "<username>"; pss = "<password>";
-        username = "immanuel01"; pss = "|23g%O=s";
+        username = "immanuel01"; pss = "`7=ts8gzA";
         
 
         String tmp1, tmp2;

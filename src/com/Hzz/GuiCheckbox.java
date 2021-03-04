@@ -105,6 +105,7 @@ public class GuiCheckbox {
 
 
         main_frame = new JFrame();
+        main_frame.setTitle("Scele-scrapper");
         main_frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         main_frame.setVisible(true);
         main_frame.setSize(500, 500);
