@@ -29,8 +29,8 @@ import java.nio.charset.StandardCharsets;
 public class Main {
     private static WebScraper webClient;
 
-    public static final String file_data_location = "scele data.pckl";
-    public static final String difference_data_location = "scele data difference.pckl";
+    public static final String file_data_location = "data/scele data.pckl";
+    public static final String difference_data_location = "data/scele data difference.pckl";
     private static HashMap<String, ScrapData> previous_data;
     private static HashMap<String, ScrapData> current_data;
     
