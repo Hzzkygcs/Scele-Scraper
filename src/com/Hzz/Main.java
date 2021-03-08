@@ -85,6 +85,17 @@ public class Main {
     
         current_data = new HashMap<>(100);
     
+        // load url entry-points from file instead of predefined values
+        try {
+            UrlEntryPoint.load("data/url_entry_point.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "data/url_entry_point.txt doesn't exist",
+                                          "File not exists", JOptionPane.ERROR_MESSAGE);
+            System.exit(130);  // random int
+        }
+    
+    
         webClient = WebScraper.defaultScrapper(null);
         webClient.setUrlQueue(UrlEntryPoint.getList());  // set the queue with a pre-filled url list
         login_scele();
