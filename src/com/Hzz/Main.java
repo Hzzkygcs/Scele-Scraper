@@ -1,10 +1,10 @@
 package com.Hzz;
 
+import static java.lang.System.console;
 import static java.lang.System.out;
 
 
-import java.io.File;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
@@ -20,12 +20,10 @@ import net.sf.repr.Repr;
 import org.w3c.dom.NodeList;
 
 import javax.swing.*;
-import java.io.IOException;
 import java.util.function.BiFunction;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.io.UnsupportedEncodingException;
 
 
 public class Main {
@@ -180,16 +178,29 @@ public class Main {
 
     private static void login_scele(){
         String login_form_url = "https://scele.cs.ui.ac.id/login/index.php?authldap_skipntlmsso=1";
-        String username, pss;  // needed to get access to scele and emas2
-        username = "<username>"; pss = "<password>";
-        
-        
+        String username = null, pss = null;  // needed to get access to scele and emas2
+        Scanner file = null;
+        try {
+            file = new Scanner(new File("data/login.txt"));
+            username = file.nextLine(); pss = file.nextLine();
+            // console_out.print(Repr.repr(username));
+            // console_out.print(Repr.repr(pss));
+            
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "data/login.txt doesn't exist",
+                                          "File not exists", JOptionPane.ERROR_MESSAGE);
+            System.exit(2);  // code 2: error file not found
+        }
+
 
         String tmp1, tmp2;
         tmp1 = encodeValue(username);
         tmp2 = encodeValue(pss);
         String request_query = ("username=%s&password=%s").formatted(tmp1, tmp2);
-
+        pss = null; System.gc();
+        
+        
         assert false;
         try {
             out.println("Logging in...");
