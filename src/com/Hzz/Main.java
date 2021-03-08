@@ -118,9 +118,15 @@ public class Main {
     
         out.println("Done");
     
-        console.getMainFrame().setVisible(false);
-        new GuiCheckbox(differences).getMainFrame()
-                .setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if (differences.size() > 0) {
+            console.getMainFrame().setVisible(false);
+            new GuiCheckbox(differences).getMainFrame()
+                    .setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Scele has no update",
+                                          "No Update", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+        }
     }
     
     
@@ -176,7 +182,7 @@ public class Main {
         String login_form_url = "https://scele.cs.ui.ac.id/login/index.php?authldap_skipntlmsso=1";
         String username, pss;  // needed to get access to scele and emas2
         username = "<username>"; pss = "<password>";
-        username = "immanuel01"; pss = "`7=ts8gzA";
+        
         
 
         String tmp1, tmp2;
@@ -272,6 +278,9 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    
+        JOptionPane.showMessageDialog(null, "Couldn't logout from scele.cs.ui.ac.id",
+                                      "Logout Error", JOptionPane.ERROR_MESSAGE);
         return false;
     }
 
@@ -382,7 +391,9 @@ public class Main {
         Set<String> new_URLs = Sets.difference(keys_current_data, keys_previous_data);
         Set<String> deleted_URLs = Sets.difference(keys_previous_data, keys_current_data);
         Set<String> still_exist_URLs = Sets.intersection(keys_previous_data, keys_current_data);
-
+    
+        // https://scele.cs.ui.ac.id/course/view.php?id=3066
+        
         for (String key: still_exist_URLs){
             ScrapData prev = previous_data.get(key);
             String prev_hash = prev.page_content_hash;
@@ -398,7 +409,8 @@ public class Main {
                 Map<String, String> tmp_map = tmp.getContentMap();
                 
                 for (var element_id: map_comparation.keySet())
-                    if (map_comparation.get(element_id) != MapComparator.DIFFERENT)
+                    if (map_comparation.get(element_id) == MapComparator.DIFFERENT
+                            || map_comparation.get(element_id) == MapComparator.ONLY_RIGHT_MAP)
                         tmp_map.put(element_id, "new/modified");
                     
                 differences.add(tmp);

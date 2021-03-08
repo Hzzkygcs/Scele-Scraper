@@ -13,10 +13,10 @@ public class ScrapPattern {
             // "https://scele\\.cs\\.ui\\.ac\\.id/course/view\\.php\\?id=\\d+",
 
             // sub course
-            "https://scele\\.cs\\.ui\\.ac\\.id/course/view\\.php\\?id=\\d+&section=\\d+",
+            //"https://scele\\.cs\\.ui\\.ac\\.id/course/view\\.php\\?id=\\d+&section=\\d+",
 
             // course forum
-            "https://scele\\.cs\\.ui\\.ac\\.id/mod/forum/view\\.php\\?id=\\d+"
+            //"https://scele\\.cs\\.ui\\.ac\\.id/mod/forum/view\\.php\\?id=\\d+"
 
             // ulangan
             // "https\\://scele.cs.ui.ac.id/mod/assign/view\\.php\\?id=\\d+",
