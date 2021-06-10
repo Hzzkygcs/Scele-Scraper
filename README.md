@@ -7,7 +7,7 @@ This project is a web-scraper for my faculty's web: scele.cs.ui.ac.id.
 Purpose (Indonesian)
 ---
 
-boleh dipakai jika malas untuk rajin-rajin mengecek halaman scele satu per satu tiap hari. Jadi jika ingin mengecek apakah ada sesuatu yang berubah pada halaman scele, 
+Anda bisa memakai aplikasi ini jika malas untuk sering-sering mengecek halaman scele satu per satu tiap hari. Jadi jika ingin mengecek apakah ada sesuatu yang berubah pada halaman scele, 
 cukup jalankan saja progrma jar nya.  Scele-scraper akan mengecek setiap halaman pada course satu-per-satu secara otomatis. Namun pengecekan hanya akan dijalankan setiap
 Anda menjalankan aplikasi tersebut. Anda bisa menambahkannya pada Task Scheduler (windows) atau aplikasi semacamnya jika ingin secara otomatis memeriksa tanpa perlu menjalankan
 program tersebut.
