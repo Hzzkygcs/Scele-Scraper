@@ -1,3 +1,4 @@
 **/*.jar
 data/login.txt
 /out/
+/target/
