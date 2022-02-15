@@ -4,7 +4,7 @@ This project is a web-scraper for my faculty's web: scele.cs.ui.ac.id.
   
 <br/>
 
-Purpose (Indonesian)
+Tujuan
 ---
 
 Anda bisa memakai aplikasi ini jika malas untuk sering-sering mengecek halaman scele satu per satu tiap hari. Jadi jika ingin mengecek apakah ada sesuatu yang berubah pada halaman scele, 
@@ -14,7 +14,7 @@ program tersebut.
 
 <br/>
 
-How to download? (Indonesian)
+Cara mendownload
 ---
 
 Anda bisa men-download bin.rar untuk mendapatkan aplikasinya tanpa perlu meng-compile, namun Anda juga bisa melihat-lihat dan meng-compile source code tersebut. 
